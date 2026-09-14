@@ -10,7 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#0A1F26; --panel:#132D35; --card:#1A4756; --line:#25525f;
+    --bg:#0D1D22; --panel:#132D35; --card:#1A4756; --line:#25525f;
     --accent:#2BBBCC; --accent2:#2E8AAA; --spark:#29EEF0; --gold:#DCB921;
     --light:#FFF8ED; --muted:#9DB4BC;
     --sans:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
@@ -180,20 +180,6 @@
           <input type="number" id="envN" class="num" min="0" max="200" step="1" value="10">
         </div>
       </div>
-
-      <details>
-        <summary>Avancé&nbsp;: taux d'intervention de base</summary>
-        <div class="row" style="margin-top:14px;gap:16px">
-          <div style="flex:1">
-            <label for="rateBizN" style="display:block;font-size:13px;color:var(--muted);margin-bottom:6px">Heures d'affaires $/h</label>
-            <input type="number" id="rateBizN" class="num" style="width:100%" min="100" max="2000" step="10" value="400">
-          </div>
-          <div style="flex:1">
-            <label for="rateAftN" style="display:block;font-size:13px;color:var(--muted);margin-bottom:6px">Hors des heures $/h</label>
-            <input type="number" id="rateAftN" class="num" style="width:100%" min="100" max="3000" step="10" value="800">
-          </div>
-        </div>
-      </details>
     </section>
 
     <!-- RÉSULTATS -->
@@ -264,7 +250,6 @@
     $("lossR").value=state.loss; $("lossN").value=state.loss;
     $("redR").value=state.red; $("redN").value=state.red;
     $("envR").value=state.env; $("envN").value=state.env;
-    $("rateBizN").value=state.rateBiz; $("rateAftN").value=state.rateAft;
     $("segBiz").textContent=m(state.rateBiz)+"/h"; $("segAft").textContent=m(state.rateAft)+"/h";
     document.querySelectorAll(".plan").forEach(function(b){b.setAttribute("aria-pressed", b.dataset.plan===state.plan?"true":"false")});
     document.querySelectorAll(".seg button").forEach(function(b){b.setAttribute("aria-pressed", b.dataset.mode===state.mode?"true":"false")});
@@ -368,10 +353,20 @@
   bind("lossR","lossN","loss",0,10000000);
   bind("redR","redN","red",0,100);
   bind("envR","envN","env",0,200);
-  bind(null,"rateBizN","rateBiz",50,2000);
-  bind(null,"rateAftN","rateAft",50,3000);
 
   update();
+})();
+</script>
+<script>
+(function () {
+  function send() {
+    parent.postMessage({ ssRoiHeight: Math.ceil(document.documentElement.scrollHeight) }, "*");
+  }
+  window.addEventListener("load", send);
+  window.addEventListener("resize", send);
+  document.addEventListener("DOMContentLoaded", send);
+  if (window.ResizeObserver) new ResizeObserver(send).observe(document.body);
+  setTimeout(send, 300);
 })();
 </script>
 </body>
